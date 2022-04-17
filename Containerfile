@@ -1,4 +1,4 @@
-FROM python:slim
+FROM ${ARCH}/python:slim
 
 RUN apt update && apt install curl sed openssh-server \
   openssh-client openssh-sftp-server faketime screen git build-essential \
