@@ -50,7 +50,6 @@ jobs:
           ./Containerfile
 
     - name: Push to GitHub Container Repository
-      id: push-to-ghcr
       uses: redhat-actions/push-to-registry@v2
       with:
         image: ${{ steps.build-image.outputs.image }}
@@ -70,7 +69,6 @@ jobs:
           ./Containerfile
 
     - name: Push to GitHub Container Repository
-      id: push-to-ghcr
       uses: redhat-actions/push-to-registry@v2
       with:
         image: ${{ steps.arm64-build-image.outputs.image }}
