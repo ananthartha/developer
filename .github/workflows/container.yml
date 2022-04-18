@@ -30,18 +30,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y qemu-user-static
 
-    - name: Buildah Build Image
-      id: build-image
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: ${{ env.IMAGE_NAME }}
-        tags: latest ${{ github.sha }}
-        archs: amd64,aarch64
-        build-args: |
-          ARCH=$ARCH
-        containerfiles: |
-          ./Containerfile
-
     - name: Log in to the GitHub Container registry
       uses: redhat-actions/podman-login@v1
       with:
@@ -49,10 +37,42 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Buildah Build Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ${{ env.IMAGE_NAME }}
+        tags: latest ${{ github.sha }}
+        archs: amd64
+        build-args: |
+          ARCH=
+        containerfiles: |
+          ./Containerfile
+
     - name: Push to GitHub Container Repository
       id: push-to-ghcr
       uses: redhat-actions/push-to-registry@v2
       with:
         image: ${{ steps.build-image.outputs.image }}
         tags: ${{ steps.build-image.outputs.tags }}
+        registry: ${{ env.REGISTRY }}
+
+    - name: Buildah arm64 Build Image
+      id: arm64-build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ${{ env.IMAGE_NAME }}
+        tags: latest ${{ github.sha }}
+        archs: aarch64
+        build-args: |
+          ARCH=arm64v8/
+        containerfiles: |
+          ./Containerfile
+
+    - name: Push to GitHub Container Repository
+      id: push-to-ghcr
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.arm64-build-image.outputs.image }}
+        tags: ${{ steps.arm64-build-image.outputs.tags }}
         registry: ${{ env.REGISTRY }}
