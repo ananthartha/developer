@@ -1,3 +1,4 @@
+ARG ARCH=
 FROM ${ARCH}python:slim
 
 RUN apt update && apt install curl sed openssh-server \
@@ -6,7 +7,7 @@ RUN apt update && apt install curl sed openssh-server \
   sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
   sed -i 's/#PermitRootLogin prohibit-password/#PermitRootLogin no/g' /etc/ssh/sshd_config
 
-COPY --from=golang:latest /usr/local/go /usr/local
+COPY --from=${ARCH}golang:latest /usr/local/go /usr/local
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
