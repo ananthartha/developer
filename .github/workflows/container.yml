@@ -41,7 +41,7 @@ jobs:
       id: arm64-build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: latest ${{ env.IMAGE_NAME }}
+        image: ${{ env.IMAGE_NAME }}
         platform: linux/arm64
         build-args: |
           ARCH=arm64v8
