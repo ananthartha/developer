@@ -43,7 +43,7 @@ jobs:
       with:
         image: developer
         tags: latest ${{ github.sha }}
-        platform: linux/arm64, linux/amd64
+        platforms: linux/arm64, linux/amd64
         containerfiles: |
           ./Containerfile
 
