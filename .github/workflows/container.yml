@@ -15,9 +15,7 @@ permissions:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        platform: [linux/arm64, linux/amd64]
+
     name: Build image
     runs-on: ubuntu-latest
     env:
@@ -46,7 +44,7 @@ jobs:
       with:
         image: developer
         tags: latest ${{ github.sha }}
-        platform: ${{ matrix.platform }}
+        platform: linux/arm64, linux/amd64
         containerfiles: |
           ./Containerfile
 
