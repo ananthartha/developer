@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   build:
-
     name: Build image
     runs-on: ubuntu-latest
     env:
@@ -38,13 +37,13 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Buildah arm64 Build Image
+    - name: Buildah Build Image
       id: arm64-build-image
       uses: redhat-actions/buildah-build@v2
       with:
         image: developer
         tags: latest ${{ github.sha }}
-        platform: linux/arm64,linux/amd64
+        platform: linux/arm64, linux/amd64
         containerfiles: |
           ./Containerfile
 
