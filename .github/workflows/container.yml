@@ -42,9 +42,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: latest ${{ github.sha }}
-        platform: linux/arm64/v8
-        build-args: |
-          ARCH=arm64v8
+        platform: linux/arm64v8
         containerfiles: |
           ./Containerfile
 
@@ -61,8 +59,6 @@ jobs:
       with:
         image: ${{ env.IMAGE_NAME }}
         tags: latest ${{ github.sha }}
-        build-args: |
-          ARCH=amd64
         containerfiles: |
           ./Containerfile
 
