@@ -42,7 +42,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: latest ${{ env.IMAGE_NAME }}
-        platform: linux/arm64v8
+        platform: linux/arm64
         build-args: |
           ARCH=arm64v8
         containerfiles: |
