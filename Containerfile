@@ -1,5 +1,4 @@
-ARG ARCH=arm64v8
-FROM ${ARCH}/python:slim
+FROM python:slim
 
 RUN apt update && apt install curl sed openssh-server \
   openssh-client openssh-sftp-server faketime screen git build-essential \
@@ -7,8 +6,7 @@ RUN apt update && apt install curl sed openssh-server \
   sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
   sed -i 's/#PermitRootLogin prohibit-password/#PermitRootLogin no/g' /etc/ssh/sshd_config
 
-ARG ARCH=arm64v8
-COPY --from=${ARCH}/golang:latest /usr/local/go /usr/local
+COPY --from=golang:latest /usr/local/go /usr/local
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"

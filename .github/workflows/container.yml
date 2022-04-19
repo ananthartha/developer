@@ -61,7 +61,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: ${{ env.IMAGE_NAME }}
-        tags: latest ${{ github.sha }}
+        tags: arm64
         archs: aarch64
         build-args: |
           ARCH=arm64v8
