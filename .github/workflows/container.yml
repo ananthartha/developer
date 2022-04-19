@@ -15,6 +15,9 @@ permissions:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        platform: [linux/arm64, linux/amd64]
     name: Build image
     runs-on: ubuntu-latest
     env:
@@ -41,8 +44,9 @@ jobs:
       id: arm64-build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: latest ${{ github.sha }}
-        platform: linux/arm64
+        image: developer
+        tags: latest ${{ github.sha }}
+        platform: ${{ matrix.platform }}
         containerfiles: |
           ./Containerfile
 
@@ -51,20 +55,4 @@ jobs:
       with:
         image: ${{ steps.arm64-build-image.outputs.image }}
         tags: ${{ steps.arm64-build-image.outputs.tags }}
-        registry: ${{ env.REGISTRY }}
-
-    - name: Buildah Build Image
-      id: build-image
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: ${{ env.IMAGE_NAME }}
-        tags: latest ${{ github.sha }}
-        containerfiles: |
-          ./Containerfile
-
-    - name: Push to GitHub Container Repository
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        image: ${{ steps.build-image.outputs.image }}
-        tags: ${{ steps.build-image.outputs.tags }}
         registry: ${{ env.REGISTRY }}
