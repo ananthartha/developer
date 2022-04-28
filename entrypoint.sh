@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Hoembrew setup
+if [[ ! -d "home/linuxbrew/.linuxbrew" ]]; then
+  su linuxbrew -c 'USER=linuxbrew /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+  su linuxbrew -c 'brew install brew tap nats-io/nats-tools'
+  su linuxbrew -c 'brew install grpc grpcurl'
+  su linuxbrew -c 'brew install nats-io/nats-tools/nats'
+  chmod 744 -R /home/linuxbrew/.linuxbrew
+fi
+# Hoembrew setup
+
 PGID=${PGID:-911}
 PUID=${INIT_PUID:-911}
 
@@ -10,20 +20,17 @@ mkdir -p /run/sshd
 
 [ $(getent group developer) ] || groupadd -g $PGID -o developer
 
-for i in "${!foo[@]}"; do 
-  printf "%s\t%s\n" "$i" "${foo[$i]}"
-done
-
 USERS=($USER_NAMES)
 KEYS=($PUBLICK_EYS)
 
 for index in "${!USERS[@]}"; do
-  username=USERS[$index]
-  publickey=KEYS[$index]
+  username=${USERS[$index]}
+  publickey=${KEYS[$index]}
 
   if [[ ! $(id -u $username &>/dev/null) ]]; then
     # Crete User
     useradd -m -u $PUID -g $PGID -o -s /bin/bash $username 
+    printf "%s\t added\n" "$username"
     # Create Home Dir
     mkdir -p /home/$username/.ssh
 
@@ -31,9 +38,9 @@ for index in "${!USERS[@]}"; do
         [[ ! $(grep "$publickey" /home/$username/.ssh/authorized_keys) ]] && \
         echo "$publickey" >> /home/$username/.ssh/authorized_keys && \
         chown -R $username:developer /home/$username/ && \
-        echo "Public key from env variable added"
+        printf "Public key addedd for %s\n" "$username"
   fi
-  PUID=$PUID+1
+  PUID=$(expr $PUID + 1)
 done
 
 /usr/sbin/sshd -D -e -p 22
