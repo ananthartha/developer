@@ -2,7 +2,7 @@ FROM python:slim
 
 RUN apt update && apt install curl sed openssh-server \
   openssh-client openssh-sftp-server faketime screen git build-essential \
-  manpages-dev g++ gcc libc6-dev make pkg-config apt-utils -y && \
+  manpages-dev g++ gcc libc6-dev make pkg-config apt-utils ksh net-tools dnsutils -y && \
   sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
   sed -i 's/#PermitRootLogin prohibit-password/#PermitRootLogin no/g' /etc/ssh/sshd_config
 
