@@ -11,6 +11,15 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
+RUN useradd -m -s /bin/bash linuxbrew && \
+  && echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers \
+  && su - linuxbrew -c 'mkdir ~/.linuxbrew'
+
+USER linuxbrew
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+USER root
+
 EXPOSE 22
 
 WORKDIR /
