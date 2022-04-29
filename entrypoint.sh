@@ -5,6 +5,7 @@ if [[ ! -d "home/linuxbrew/.linuxbrew" ]]; then
   mkdir -p /home/linuxbrew/
   chown -R linuxbrew /home/linuxbrew/
   su linuxbrew -c 'USER=linuxbrew /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+  su linuxbrew -c "echo 'eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"' >> /home/linuxbrew/.profile"
   su linuxbrew -c 'brew install brew tap nats-io/nats-tools'
   su linuxbrew -c 'brew install grpc grpcurl'
   su linuxbrew -c 'brew install nats-io/nats-tools/nats'
